@@ -10,7 +10,7 @@ const { Storage } = require('./lib/Storage')
 const schedule = require('node-schedule')
 
 const scrape = async () => {
-	console.log('starting')
+	console.log('Starting')
 	const args = [
 		'--no-sandbox',
 		'--disable-setuid-sandbox',
@@ -60,6 +60,7 @@ async function main () {
 				})
 			}
 		}
+		console.log('Finished')
 	})
 }
 
