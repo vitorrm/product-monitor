@@ -24,9 +24,10 @@ const scrape = async () => {
 		ignoreDefaultArgs: ['--disable-extensions'],
 		args
 	})
+	console.log('Browser launched')
 	const page = new PhonePage(browser)
 	await page.open()
-
+	console.log('Page opened')
 	const price = await page.getPrice()
 	console.log('Price captured:', price)
 	browser.close()
