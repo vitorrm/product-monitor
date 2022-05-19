@@ -2,9 +2,9 @@ name: Check-Product
 
 on: 
   workflow_dispatch:
-  schedule:
+  #schedule:
     # https://crontab.guru/#*/0_*_*_*_1-6
-    - cron:  '*/5 0 * * 1-6'
+  #  - cron:  '*/5 0 * * 1-6'
 jobs:
   checking:
     name: Product Check
