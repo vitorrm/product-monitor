@@ -46,22 +46,26 @@ const sendEmail = async ({ price }) => {
 }
 
 async function main () {
-	scrape().then(async ({ price }) => {
-		if (price <= 2001) {
-			console.log('Price matched')
-			const S21 = 'S21'
-			const storage = new Storage('./workdir/products-db.json')
-			const previousStatus = await storage.read(S21)
-			if (!previousStatus || Number(previousStatus.price) !== Number(price)) {
-				console.log('New Price, sending email')
-				await sendEmail({ price })
-				storage.save(S21, {
-					price
-				})
+	try {
+		scrape().then(async ({ price }) => {
+			if (price <= 2001) {
+				console.log('Price matched')
+				const S21 = 'S21'
+				const storage = new Storage('./workdir/products-db.json')
+				const previousStatus = await storage.read(S21)
+				if (!previousStatus || Number(previousStatus.price) !== Number(price)) {
+					console.log('New Price, sending email')
+					await sendEmail({ price })
+					storage.save(S21, {
+						price
+					})
+				}
 			}
-		}
-		console.log('Finished')
-	})
+			console.log('Finished')
+		})
+	} catch (error) {
+		console.log('Error', error)
+	}
 }
 
 schedule.scheduleJob('*/5 * * * *', main)
