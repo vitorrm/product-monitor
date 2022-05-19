@@ -1,0 +1,34 @@
+name: Check-Product
+
+on: 
+  workflow_dispatch:
+  schedule:
+    # https://crontab.guru/#0/5_*_*_*_1-7
+    - cron:  '0/5 * * * 1-7'
+
+jobs:
+  checking:
+    name: Product Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - run: npm install
+      - run: mkdir -p workdir
+      - name: Download artifact
+        continue-on-error: true
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          workflow: check-products.yml
+          workflow_conclusion: success
+          name: products-status
+          path: workdir
+      - run: npm start -- --email-user ${{secrets.SMTP_EMAIL_USER}} --email-pass ${{secrets.SMTP_EMAIL_PASS}} 
+      - uses: actions/upload-artifact@v2
+        with:
+          name: products-status
+          path: workdir/products-db.json
+          retention-days: 1
