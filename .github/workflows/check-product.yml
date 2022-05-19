@@ -3,7 +3,7 @@ name: Check-Product
 on: 
   workflow_dispatch:
   schedule:
-    # https://crontab.guru/#*/0_*_*_*_1-7
+    # https://crontab.guru/#*/0_*_*_*_1-6
     - cron:  '0 0 * * 1-6'
 jobs:
   checking:
