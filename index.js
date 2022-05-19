@@ -7,6 +7,8 @@ const { PhonePage } = require('./lib/PhonePage')
 const { EmailSender } = require('./lib/EmailSender')
 const { Storage } = require('./lib/Storage')
 
+const schedule = require('node-schedule')
+
 const scrape = async () => {
 	console.log('starting')
 	const args = [
@@ -43,18 +45,22 @@ const sendEmail = async ({ price }) => {
 	sender.close()
 }
 
-scrape().then(async ({ price }) => {
-	if (price < 3000) {
-		console.log('Price matched')
-		const S21 = 'S21'
-		const storage = new Storage('./workdir/products-db.json')
-		const previousStatus = await storage.read(S21)
-		if (!previousStatus || Number(previousStatus.price) !== Number(price)) {
-			console.log('New Price, sending email')
-			await sendEmail({ price })
-			storage.save(S21, {
-				price
-			})
+async function main () {
+	scrape().then(async ({ price }) => {
+		if (price < 3000) {
+			console.log('Price matched')
+			const S21 = 'S21'
+			const storage = new Storage('./workdir/products-db.json')
+			const previousStatus = await storage.read(S21)
+			if (!previousStatus || Number(previousStatus.price) !== Number(price)) {
+				console.log('New Price, sending email')
+				await sendEmail({ price })
+				storage.save(S21, {
+					price
+				})
+			}
 		}
-	}
-})
+	})
+}
+
+schedule.scheduleJob('*/5 * * * *', main)
