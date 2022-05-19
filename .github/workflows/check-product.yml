@@ -3,8 +3,8 @@ name: Check-Product
 on: 
   workflow_dispatch:
   schedule:
-    # https://crontab.guru/#*/5_*_*_*_1-7
-    - cron:  '0,10,20,30,40,50 * * * 1-7'
+    # https://crontab.guru/#*/0_*_*_*_1-7
+    - cron:  '0 * * * 1-7'
 jobs:
   checking:
     name: Product Check
