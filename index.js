@@ -10,7 +10,7 @@ const { Storage } = require('./lib/Storage')
 const schedule = require('node-schedule')
 
 const scrape = async () => {
-	console.log('Starting')
+	console.log('Starting', new Date().toISOString())
 	const args = [
 		'--no-sandbox',
 		'--disable-setuid-sandbox',
