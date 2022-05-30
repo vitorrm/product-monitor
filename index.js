@@ -46,7 +46,7 @@ const sendEmail = async ({ price }) => {
 }
 
 async function main () {
-	scrape().then(async ({ price }) => {
+	return scrape().then(async ({ price }) => {
 		if (price <= 2001) {
 			console.log('Price matched')
 			const S21 = 'S21'
