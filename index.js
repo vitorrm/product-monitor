@@ -46,7 +46,8 @@ const sendEmail = async ({ price }) => {
 }
 
 async function main () {
-	return scrape().then(async ({ price }) => {
+	try {
+		const { price } = await scrape()
 		if (price <= 2001) {
 			console.log('Price matched')
 			const S21 = 'S21'
@@ -61,9 +62,9 @@ async function main () {
 			}
 		}
 		console.log('Finished')
-	}).catch(function (error) {
-		console.log('Error', error)
-	})
+	} catch (error) {
+		console.log('Failed:', error)
+	}
 }
 
 schedule.scheduleJob('*/5 * * * *', main)
