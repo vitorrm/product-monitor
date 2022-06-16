@@ -10,30 +10,34 @@ const { Storage } = require('./lib/Storage')
 const schedule = require('node-schedule')
 
 const scrape = async () => {
-	console.log(`${new Date().toISOString()} - Starting`)
-	const args = [
-		'--no-sandbox',
-		'--disable-setuid-sandbox',
-		'--disable-infobars',
-		'--window-position=0,0',
-		'--ignore-certifcate-errors',
-		'--ignore-certifcate-errors-spki-list',
-		'--user-agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3312.0 Safari/537.36"'
-	]
-	const browser = await puppeteer.launch({
-		headless: true,
-		ignoreHTTPSErrors: true,
-		ignoreDefaultArgs: ['--disable-extensions'],
-		args
-	})
-	console.log('Browser launched')
-	const page = new PhonePage(browser)
-	await page.open()
-	console.log('Page opened')
-	const price = await page.getPrice()
-	console.log('Price captured:', price)
-	browser.close()
-	return { price }
+	let browser
+	try {
+		console.log(`${new Date().toISOString()} - Starting`)
+		const args = [
+			'--no-sandbox',
+			'--disable-setuid-sandbox',
+			'--disable-infobars',
+			'--window-position=0,0',
+			'--ignore-certifcate-errors',
+			'--ignore-certifcate-errors-spki-list',
+			'--user-agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3312.0 Safari/537.36"'
+		]
+		browser = await puppeteer.launch({
+			headless: true,
+			ignoreHTTPSErrors: true,
+			ignoreDefaultArgs: ['--disable-extensions'],
+			args
+		})
+		console.log('Browser launched')
+		const page = new PhonePage(browser)
+		await page.open()
+		console.log('Page opened')
+		const price = await page.getPrice()
+		console.log('Price captured:', price)
+		return { price }
+	} finally {
+		if (browser) browser.close()
+	}
 }
 
 const sendEmail = async ({ price }) => {
