@@ -52,7 +52,7 @@ const sendEmail = async ({ price }) => {
 async function main () {
 	try {
 		const { price } = await scrape()
-		if (price <= 2001) {
+		if (price <= 2101) {
 			console.log('Price matched')
 			const S21 = 'S21'
 			const storage = new Storage('./workdir/products-db.json')
